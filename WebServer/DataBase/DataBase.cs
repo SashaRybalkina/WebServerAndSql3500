@@ -105,7 +105,7 @@ public class DataBase
 
             con.Open();
 
-            using SqlCommand command = new SqlCommand("INSERT INTO Patrons VALUES (6,'Dav')", con);
+            using SqlCommand command = new SqlCommand("INSERT INTO Players VALUES ('Jessica', 6)", con);
             using SqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -182,10 +182,5 @@ public class DataBase
         {
             Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
         }
-    }
-
-    public static void Main(string[] args)
-    {
-
     }
 }

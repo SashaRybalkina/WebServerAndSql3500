@@ -1,2 +1,10 @@
 ﻿using AS9;
-DataBase.Main(new string[] { "" });
+
+class Program
+{
+    public static void Main(string[] args)
+    {
+
+    }
+
+}
