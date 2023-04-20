@@ -1,7 +1,11 @@
-﻿namespace WebServer;
+﻿namespace AS9;
 
+using System.Numerics;
+using System.Text.Json;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Communications;
+using System.Collections.Generic;
 
 /// <summary>
 /// Author:  H. James de St. Germain
@@ -34,32 +38,12 @@ public class DataBase
 
         connectionString = new SqlConnectionStringBuilder()
         {
-            DataSource = "S2023_u1362376,14330",
-            InitialCatalog = "cs3500",
-            UserID = "S2023_u1362376",
-            Password = SelectedSecrets["Password"],
-            Encrypt = false
+            DataSource      = SelectedSecrets["DataSource"],
+            InitialCatalog  = SelectedSecrets["InitialCatalog"],
+            UserID          = SelectedSecrets["UserID"],
+            Password        = SelectedSecrets["Password"],
+            Encrypt         = false
         }.ConnectionString;
-    }
-
-    /// <summary>
-    ///  Test several connections and print the output to the console
-    /// </summary>
-    /// <param name="args"></param>
-    public static void Main(string[] args)
-    {
-        Console.WriteLine(connectionString);
-        Console.WriteLine("\n---------- Read All Patrons ---------------");
-        AllPatrons();
-
-        Console.WriteLine("\n---------- Add Patrons ---------------");
-        AddPatrons();
-
-        Console.WriteLine("\n---------- Read All Phone Numbers ---------------");
-        AllPhones();
-
-        Console.WriteLine("\n---------- JOIN Patrons and Phone Numbers ---------------");
-        PatronsPhones();
     }
 
 
@@ -111,7 +95,7 @@ public class DataBase
     /// Note:
     ///   (1) Fails because the user does not have permission to do so!
     /// </summary>
-    static void AddPatrons()
+    public void AddPlayers(string message)
     {
         Console.WriteLine("Can we add a row?");
 
@@ -159,7 +143,7 @@ public class DataBase
 
             while (reader.Read())
             {
-                Console.WriteLine($"{reader["CardNum"]} - {reader["Phone"]}");
+                Console.WriteLine($"{reader["CardNum/column"]} - {reader["Phone/column"]}");
             }
         }
         catch (SqlException exception)
@@ -198,5 +182,10 @@ public class DataBase
         {
             Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
         }
+    }
+
+    public static void Main(string[] args)
+    {
+
     }
 }
