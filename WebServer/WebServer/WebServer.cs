@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml.Linq;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AS9
 {
@@ -24,21 +25,7 @@ namespace AS9
         /// </summary>
         static private int counter = 1;
 
-        //private ILogger logger = new Logger<>();
-
-        private const char termChar = '\n';
-
-        private Networking network;
-
-        public ILogger logger;
-
         private static DataBase DB = new DataBase();
-
-        private int port = 11001;
-
-        private static string hostName = Dns.GetHostName();
-
-        private string IPAddress = Dns.GetHostByName(hostName).AddressList[0].ToString();
 
         /// <summary>
         /// Basic connect handler - i.e., a browser has connected!
@@ -48,7 +35,7 @@ namespace AS9
 
         internal static void OnClientConnect(Networking channel)
         {
-            throw new NotImplementedException("Print something about a connection happening");
+            Console.WriteLine("Recieved Connection");
         }
 
         /// <summary>
@@ -66,7 +53,7 @@ namespace AS9
         private static string BuildHTTPResponseHeader(int length, string type = "text/html")
         {
             return $@"
-                    <!DOCTYPE HTML PUBLIC ""-//IETF//DTD HTML 2.0//EN"">
+                    <!DOCTYPE HTML PUBLIC ""-//IETF//DTD HTML 2.0//EN>
                     <html>
                     <head>
                         <title>404 Not Found</title>
@@ -92,7 +79,7 @@ namespace AS9
                     <html>
                     <body>
                     <h1>hello world{counter}</h1>
-                    <a href='localhost:11000'>Reload</a> 
+                    <a href='localhost:11001'>Reload</a> 
                     </body>
                     </html>";
         }
@@ -161,7 +148,7 @@ namespace AS9
         /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
         internal static void OnMessage(Networking channel, string message)
         {
-            DB.AddPlayers(message);
+            BuildMainPage();
         }
 
         /// <summary>

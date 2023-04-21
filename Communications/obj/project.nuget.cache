@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "dwMJSOhHy8kyxO1BDn5M9HQgf0BiXaPd8nwOqdSUNQ/wdib3NH29IkDcczcltpsQQaGjyGEm13rQh/2ahjq9nw==",
+  "dgSpecHash": "Fy6chRgaI/3zd9VCmiXWKZTxZgrsG4gFT8XiKWV9th8mB9aD/U01KDWsdMbF54AkBUrET9cZGsZFok7ZaqraLQ==",
   "success": true,
-  "projectFilePath": "/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/Communications.csproj",
+  "projectFilePath": "/Users/sasharybalkina/Projects/AS9/Communications/Communications.csproj",
   "expectedPackageFiles": [
-    "/Users/aurora/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
-    "/Users/aurora/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/7.0.0/microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
-    "/Users/aurora/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
-    "/Users/aurora/.nuget/packages/microsoft.extensions.logging.abstractions/7.0.0/microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
-    "/Users/aurora/.nuget/packages/microsoft.extensions.options/7.0.0/microsoft.extensions.options.7.0.0.nupkg.sha512",
-    "/Users/aurora/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/7.0.0/microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.logging.abstractions/7.0.0/microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.options/7.0.0/microsoft.extensions.options.7.0.0.nupkg.sha512",
+    "/Users/sasharybalkina/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

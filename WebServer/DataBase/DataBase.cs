@@ -56,46 +56,46 @@ public class DataBase
     /// (3) how to write a direct SQL query and send it to the server
     /// (4) how to retrieve the data
     /// </summary>
-    static void AllPatrons()
-    {
-        Console.WriteLine("Getting Connection ...");
+    //static void AllPatrons()
+    //{
+    //    Console.WriteLine("Getting Connection ...");
 
-        try
-        {
-            //create instance of database connection
-            using SqlConnection con = new(connectionString);
+    //    try
+    //    {
+    //        //create instance of database connection
+    //        using SqlConnection con = new(connectionString);
 
-            //
-            // Open the SqlConnection.
-            //
-            con.Open();
+    //        //
+    //        // Open the SqlConnection.
+    //        //
+    //        con.Open();
 
-            //
-            // This code uses an SqlCommand based on the SqlConnection.
-            //
-            using SqlCommand command = new SqlCommand("SELECT * FROM Patrons", con);
-            using SqlDataReader reader = command.ExecuteReader();
+    //        //
+    //        // This code uses an SqlCommand based on the SqlConnection.
+    //        //
+    //        using SqlCommand command = new SqlCommand("SELECT * FROM Patrons", con);
+    //        using SqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read())
-            {
-                Console.WriteLine("{0} {1}",
-                    reader.GetInt32(0), reader.GetString(1));
-            }
+    //        while (reader.Read())
+    //        {
+    //            Console.WriteLine("{0} {1}",
+    //                reader.GetInt32(0), reader.GetString(1));
+    //        }
 
-            Console.WriteLine($"Successful SQL connection");
-        }
-        catch (SqlException exception)
-        {
-            Console.WriteLine($"Error in SQL connection: {exception.Message}");
-        }
-    }
+    //        Console.WriteLine($"Successful SQL connection");
+    //    }
+    //    catch (SqlException exception)
+    //    {
+    //        Console.WriteLine($"Error in SQL connection: {exception.Message}");
+    //    }
+    //}
 
     /// <summary>
     /// Try to add a row to the database table
     /// Note:
     ///   (1) Fails because the user does not have permission to do so!
     /// </summary>
-    public void AddPlayers(string message)
+    public void AddPlayers()
     {
         Console.WriteLine("Can we add a row?");
 
@@ -113,7 +113,9 @@ public class DataBase
                 Console.WriteLine("{0} {1}",
                     reader.GetInt32(0), reader.GetString(1));
             }
+            con.Close();
         }
+        
         catch (SqlException exception)
         {
             Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
@@ -128,29 +130,29 @@ public class DataBase
     /// (1) use of "dictionary" access
     /// (2) Select [named columns] syntax 
     /// </summary>
-    public static void AllPhones()
-    {
-        Console.WriteLine("What phone numbers exist?");
+    //public static void AllPhones()
+    //{
+    //    Console.WriteLine("What phone numbers exist?");
 
-        try
-        {
-            using SqlConnection con = new SqlConnection(connectionString);
+    //    try
+    //    {
+    //        using SqlConnection con = new SqlConnection(connectionString);
 
-            con.Open();
+    //        con.Open();
 
-            using SqlCommand command = new SqlCommand("SELECT CardNum, Phone FROM Phones", con);
-            using SqlDataReader reader = command.ExecuteReader();
+    //        using SqlCommand command = new SqlCommand("SELECT CardNum, Phone FROM Phones", con);
+    //        using SqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read())
-            {
-                Console.WriteLine($"{reader["CardNum/column"]} - {reader["Phone/column"]}");
-            }
-        }
-        catch (SqlException exception)
-        {
-            Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
-        }
-    }
+    //        while (reader.Read())
+    //        {
+    //            Console.WriteLine($"{reader["CardNum/column"]} - {reader["Phone/column"]}");
+    //        }
+    //    }
+    //    catch (SqlException exception)
+    //    {
+    //        Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
+    //    }
+    //}
 
     /// <summary>
     ///  JOIN the Phone number table with the Patrons table 
@@ -158,29 +160,29 @@ public class DataBase
     ///  
     ///  Notice: Explicit JOIN
     /// </summary>
-    public static void PatronsPhones()
-    {
-        Console.WriteLine("What phone numbers exist?");
+    //public static void PatronsPhones()
+    //{
+    //    Console.WriteLine("What phone numbers exist?");
 
-        try
-        {
-            using SqlConnection con = new SqlConnection(connectionString);
+    //    try
+    //    {
+    //        using SqlConnection con = new SqlConnection(connectionString);
 
-            con.Open();
+    //        con.Open();
 
-            using SqlCommand command = new SqlCommand("SELECT * FROM Phones JOIN Patrons ON Phones.CardNum = PAtrons.CardNum", con);
-            using SqlDataReader reader = command.ExecuteReader();
+    //        using SqlCommand command = new SqlCommand("SELECT * FROM Phones JOIN Patrons ON Phones.CardNum = PAtrons.CardNum", con);
+    //        using SqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read())
-            {
-                {
-                    Console.WriteLine($"{reader["Name"].ToString()?.Trim()} ({reader["CardNum"]}) - {reader["Phone"]}");
-                }
-            }
-        }
-        catch (SqlException exception)
-        {
-            Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
-        }
-    }
+    //        while (reader.Read())
+    //        {
+    //            {
+    //                Console.WriteLine($"{reader["Name"].ToString()?.Trim()} ({reader["CardNum"]}) - {reader["Phone"]}");
+    //            }
+    //        }
+    //    }
+    //    catch (SqlException exception)
+    //    {
+    //        Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
+    //    }
+    //}
 }
