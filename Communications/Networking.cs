@@ -175,30 +175,13 @@ namespace Communications
             // into message callback 
             string allData = fullMessageHolder.ToString();
             int terminator_position = allData.IndexOf(endTerminator);
-            bool foundOneMessage = false;
             while (terminator_position >= 0)
             {
-                foundOneMessage = true;
-
                 string message = allData.Substring(0, terminator_position);
                 fullMessageHolder.Remove(0, terminator_position + 1);
-                logger.LogInformation($"  Message found:\n" +
-                    $"  ---------------------------------------------------------------------------------\n" +
-                    $"  {message}\n");
                 handleMessage(this, message);
                 allData = fullMessageHolder.ToString();
                 terminator_position = allData.IndexOf(endTerminator);
-            }
-
-            if (!foundOneMessage)
-            {
-                logger.LogInformation("not full message");
-            }
-            else
-            {
-                logger.LogInformation($"  --------------------------------------------------------------------------------\n" +
-                    $"  After Message: {fullMessageHolder.Length} bytes processed by callback.\n" +
-                    $"  --------------------------------------------------------------------------------\n");
             }
         }
         /// <summary>
@@ -211,7 +194,7 @@ namespace Communications
             TcpListener network_listener = new TcpListener(IPAddress.Any, port);
             network_listener.Start();
             // do while here and everything is this while loop
-            while (infinite)
+            do
             {
                 try
                 {
@@ -234,6 +217,7 @@ namespace Communications
                     infinite = false;
                 }
             }
+            while (infinite);
 
         }
         /// <summary>

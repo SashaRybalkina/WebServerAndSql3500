@@ -52,18 +52,9 @@ namespace AS9
         /// <returns>returns a string with the response header</returns>
         private static string BuildHTTPResponseHeader(int length, string type = "text/html")
         {
-            return $@"
-                    <!DOCTYPE HTML PUBLIC ""-//IETF//DTD HTML 2.0//EN>
-                    <html>
-                    <head>
-                        <title>404 Not Found</title>
-                    </head>
-                    <body>
-                        <h1>Not Found</h1>
-                        <p>The requested URL /t.html was not found on this server.</p>
-                    </body>
-                    </html>";
+            return $"HTTP/1.1 200 OK\r\nDate: {DateTime.Now}\r\nContent-Length: {length}\r\nContent-Type: text/html";
         }
+                    
 
         /// <summary>
         ///   Create a web page!  The body of the returned message is the web page
@@ -101,7 +92,7 @@ namespace AS9
             string message = BuildHTTPBody();
             string header = BuildHTTPResponseHeader(message.Length);
 
-            return header + message;
+            return header + '\r'+'\n' + message;
         }
 
         /// <summary>
@@ -148,7 +139,18 @@ namespace AS9
         /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
         internal static void OnMessage(Networking channel, string message)
         {
-            BuildMainPage();
+            //string send = BuildMainPage();
+            string message1 = BuildHTTPBody();
+            string header = BuildHTTPResponseHeader(message.Length);
+            if (message.Contains("GET"))
+            {
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(message1);
+            }
+
+            //channel.Send(send);
+            Console.WriteLine(message);
         }
 
         /// <summary>
