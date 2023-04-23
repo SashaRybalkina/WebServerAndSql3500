@@ -52,7 +52,7 @@ namespace AS9
         /// <returns>returns a string with the response header</returns>
         private static string BuildHTTPResponseHeader(int length, string type = "text/html")
         {
-            return $"HTTP/1.1 200 OK\r\nDate: {DateTime.Now}\r\nContent-Length: {length}\r\nContent-Type: text/html";
+            return $"HTTP/1.1 200 OK\rContent-Length: {length}\rContent-Type: text/html";
         }
                     
 
@@ -66,13 +66,13 @@ namespace AS9
         {
             // FIXME: this should be a complete web page.
             return $@"
-                    <!DOCTYPE html>
-                    <html>
-                    <body>
-                    <h1>hello world{counter}</h1>
-                    <a href='localhost:11001'>Reload</a> 
-                    </body>
-                    </html>";
+<!DOCTYPE html>
+<html>
+<body>
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+</body>
+</html>";
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace AS9
             string message = BuildHTTPBody();
             string header = BuildHTTPResponseHeader(message.Length);
 
-            return header + '\r'+'\n' + message;
+            return header + message;
         }
 
         /// <summary>
@@ -139,18 +139,12 @@ namespace AS9
         /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
         internal static void OnMessage(Networking channel, string message)
         {
-            //string send = BuildMainPage();
             string message1 = BuildHTTPBody();
-            string header = BuildHTTPResponseHeader(message.Length);
-            if (message.Contains("GET"))
-            {
-                channel.Send(header);
-                channel.Send("");
-                channel.Send(message1);
-            }
-
-            //channel.Send(send);
-            Console.WriteLine(message);
+            string header = BuildHTTPResponseHeader(message1.Length);
+            channel.Send(header);
+            channel.Send("");
+            channel.Send(message1);
+            //channel.Send(BuildMainPage());
         }
 
         /// <summary>
