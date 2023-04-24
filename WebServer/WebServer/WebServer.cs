@@ -53,7 +53,7 @@ namespace AS9
         {
             return $"HTTP/1.1 200 OK\rDate: {DateTime.Now}\rContent-Length: {length}\rContent-Type: text/html\rConnection: Closed";
         }
-                    
+
 
         /// <summary>
         ///   Create a web page!  The body of the returned message is the web page
@@ -65,6 +65,9 @@ namespace AS9
         {
             return "<!DOCTYPE html>" +
                     "<html>" +
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
                     "<body>" +
                         "<h1>Welcome to the Home Page! :)</h1>" +
                         "<p>Supported Requests:\r</p>"+
@@ -89,14 +92,16 @@ namespace AS9
             string AddToTable = "";
             foreach(string player in players.Keys)
             {
-                AddToTable += $@"<td>{player}</td><td>{players[player]}</td>";
+                AddToTable += $@"<tr><td>{player}</td><td>{players[player]}</td></tr>";
             }
             return  "<!DOCTYPE html>"+
                     "<html>"+
-                    "<body>"+
+                    "<body>" +
                         $@"<table style=""width:100%"">"+
+                            "<tr>"+
                             "<th>Player</th>"+
                             "<th>Score</th>"+
+                            "</tr>"+
                             AddToTable+
                         "</table>"+
                     "</body>"+
@@ -234,8 +239,8 @@ namespace AS9
         /// <returns>HTTP Response Header with CSS file contents added</returns>
         private static string SendCSSResponse()
         {
-            throw new NotSupportedException("read the css file from the solution folder, build an http response, and return this string");
-            //Note: for starters, simply return a static hand written css string from right here (don't do file reading)
+            return "<style>" +
+                   "</style>";
         }
 
 
