@@ -100,7 +100,8 @@ namespace AS9
                         SendCSSResponse() +
                     "</head>" +
                     "<body>" +
-                        $@"<table style=""width:100%"">"+
+                    "<h1> Highscores </h1> " +
+                        $@"<table>"+
                             "<tr>"+
                             "<th>Player</th>"+
                             "<th>Score</th>"+
@@ -124,7 +125,7 @@ namespace AS9
             {
                 string score = ScoreAndGame[0];
                 string gameID = ScoreAndGame[1];
-                AddToTable += $@"<td>{score}</td><td>{gameID}</td>";
+                AddToTable += $@"<tr><td>{score}</td><td>{gameID}</td><tr>";
             }
             return "<!DOCTYPE html>"+
                     "<html>"+
@@ -132,10 +133,12 @@ namespace AS9
                         SendCSSResponse() +
                     "</head>" +
                     "<body>" +
-                        $@"<h1>{playerName}'s Scores"+
-                        $@"<table style=""width:100%"">"+
-                            "<th>Game</th>"+
-                            "<th>Score</th>"+
+                        $@"<h1>{playerName}'s Scores</h1>"+
+                        $@"<table>"+
+                            "<tr>" +
+                            "<th>Score</th>" +
+                            "<th>Game</th>" +
+                            "" +
                             AddToTable +
                         "</table>"+
                     "</body>"+
@@ -246,13 +249,23 @@ namespace AS9
         private static string SendCSSResponse()
         {
             return  "<style>" +
-                        "h1 {" +
-                            "color: pink;" +
+                        "body {background-color: darkorchid;}" +
+                        "table, th, td {" +
+                            "border: 2px solid deeppink;" +
+                            "width: 50%;" +
+                            "color: deeppink;" +
+                            "background-color: purple;" +
+                        "}" +
+                        "table {" +
+                            "width: 100%;" +
+                        "}" +
+                        "td {" +
                             "text-align: center;" +
                         "}" +
-                        "table, th, td {" +
-                            "border:lpx solid black;" +
-                        "}"+
+                        "h1 {" +
+                            "color: hotpink;" +
+                            "text-align: center;" +
+                        "}" +
                     "</style>";
 
         }
