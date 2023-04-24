@@ -9,7 +9,7 @@ class Program
     {
         WebServer server = new WebServer();
         Networking network = new Networking(NullLogger.Instance, WebServer.OnMessage, WebServer.OnDisconnect, WebServer.OnClientConnect, '\n');
-        network.WaitForClients(11001, false);
+        network.WaitForClients(11001, true);
         Console.ReadLine();
     }
 }

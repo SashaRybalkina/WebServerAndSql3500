@@ -23,7 +23,6 @@ namespace AS9
         /// keep track of how many requests have come in.  Just used
         /// for display purposes.
         /// </summary>
-        static private int counter = 1;
 
         private static DataBase DB = new DataBase();
 
@@ -52,7 +51,7 @@ namespace AS9
         /// <returns>returns a string with the response header</returns>
         private static string BuildHTTPResponseHeader(int length, string type = "text/html")
         {
-            return $"HTTP/1.1 200 OK\rContent-Length: {length}\rContent-Type: text/html";
+            return $"HTTP/1.1 200 OK\rDate: {DateTime.Now}\rContent-Length: {length}\rContent-Type: text/html\rConnection: Closed";
         }
                     
 
@@ -64,15 +63,72 @@ namespace AS9
         /// <returns> A string the represents a web page.</returns>
         private static string BuildHTTPBody()
         {
-            // FIXME: this should be a complete web page.
-            return $@"
-<!DOCTYPE html>
-<html>
-<body>
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-</body>
-</html>";
+            return "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<body>" +
+                        "<h1>Welcome to the Home Page! :)</h1>" +
+                        "<p>Supported Requests:\r</p>"+
+                        "<a href=“http://localhost:11001”\r> localhost:11001 </a>" +
+                        "<p></p>" +
+                        "<a href=“http://localhost:11001/”\r> localhost:11001/ </a>" +
+                        "<p></p>" +
+                        "<a href=“http://localhost:11001/index”\r> localhost:11001/index </a>" +
+                        "<p></p>" +
+                        "<a href=“http://localhost:11001/index.html”> localhost:11001/index.html a>" +
+                    "</body>" +
+                    "</html>";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static string BuildHTTPHighScoresPage()
+        {
+            Dictionary<string, string> players = DB.ReadPlayerScores();
+            string AddToTable = "";
+            foreach(string player in players.Keys)
+            {
+                AddToTable += $@"<td>{player}</td><td>{players[player]}</td>";
+            }
+            return  "<!DOCTYPE html>"+
+                    "<html>"+
+                    "<body>"+
+                        $@"<table style=""width:100%"">"+
+                            "<th>Player</th>"+
+                            "<th>Score</th>"+
+                            AddToTable+
+                        "</table>"+
+                    "</body>"+
+                    "</html>";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <returns></returns>
+        private static string BuildHTTPScoresOfPlayer(string playerName)
+        {
+            Dictionary<string, List<List<string>>> ScoresAndGames = DB.ReadScoresOfPlayers();
+            string AddToTable = "";
+            foreach (List<string> ScoreAndGame in ScoresAndGames[playerName])
+            {
+                string score = ScoreAndGame[0];
+                string gameID = ScoreAndGame[1];
+                AddToTable += $@"<td>{score}</td><td>{gameID}</td>";
+            }
+            return "<!DOCTYPE html>"+
+                    "<html>"+
+                    "<body>"+
+                        $@"<h1>{playerName}'s Scores"+
+                        $@"<table style=""width:100%"">"+
+                            "<th>Game</th>"+
+                            "<th>Score</th>"+
+                            AddToTable +
+                        "</table>"+
+                    "</body>"+
+                    "</html>";
         }
 
         /// <summary>
@@ -139,12 +195,37 @@ namespace AS9
         /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
         internal static void OnMessage(Networking channel, string message)
         {
-            string message1 = BuildHTTPBody();
-            string header = BuildHTTPResponseHeader(message1.Length);
-            channel.Send(header);
-            channel.Send("");
-            channel.Send(message1);
-            //channel.Send(BuildMainPage());
+            if (message.Contains("/scores/"))
+            {
+                string player = message.Remove(0, 12);
+                int toRemove = player.Length - 10;
+                player = player.Substring(0, toRemove);
+                string body = BuildHTTPScoresOfPlayer(player);
+                string header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+            }
+            else if (message.Contains("/highscores"))
+            {
+                string body = BuildHTTPHighScoresPage();
+                string header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+            }
+            else if (message.Contains("localhost:11001")
+                  || message.Contains("localhost:11001/")
+                  || message.Contains("localhost:11001/index.html")
+                  || message.Contains("localhost:11001/index"))
+            {
+                string body = BuildHTTPBody();
+                string header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+                channel.Disconnect();
+            }
         }
 
         /// <summary>

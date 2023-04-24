@@ -72,4 +72,75 @@ public class DataBase
             Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
         }
     }
+
+    public Dictionary<string, string> ReadPlayerScores()
+    {
+        Dictionary<string, string> scores = new();
+
+        try
+        {
+            using SqlConnection con = new SqlConnection(connectionString);
+
+            con.Open();
+
+            using SqlCommand command = new SqlCommand("SELECT Player, Score FROM HighScores", con);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                scores.Add(reader["Player"].ToString(), reader["Score"].ToString());
+                Console.WriteLine($"{reader["Player"]} - {reader["Score"]}");
+            }
+        }
+
+        catch (SqlException exception)
+        {
+            Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
+        }
+
+        return scores;
+    }
+    public Dictionary<string, List<List<string>>> ReadScoresOfPlayers()
+    {
+        Dictionary<string, List<List<string>>> scores = new();
+
+        try
+        {
+            using SqlConnection con = new SqlConnection(connectionString);
+
+            con.Open();
+
+            using SqlCommand command = new SqlCommand("SELECT Player, Score, GameID FROM AllGames", con);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string ?player = reader["Player"].ToString();
+                string ?score = reader["Score"].ToString();
+                string ?gameID = reader["GameID"].ToString();
+
+                List<string> ScoreAndGame = new();
+                ScoreAndGame.Add(score);
+                ScoreAndGame.Add(gameID);
+
+                if (scores.ContainsKey(player))
+                {
+                    scores[player].Add(ScoreAndGame);
+                }
+                else
+                {
+                    List<List<string>> ScoresAndGames = new();
+                    ScoresAndGames.Add(ScoreAndGame);
+                    scores.Add(player, ScoresAndGames);
+                } 
+            }
+        }
+
+        catch (SqlException exception)
+        {
+            Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
+        }
+
+        return scores;
+    }
 }
