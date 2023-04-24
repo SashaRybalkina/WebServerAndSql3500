@@ -70,7 +70,7 @@ namespace AS9
                     "</head>" +
                     "<body>" +
                         "<h1>Welcome to the Home Page! :)</h1>" +
-                        "<p>Supported Requests:\r</p>"+
+                        "<h2>Supported Requests:\r</h2>"+
                         "<a href=“http://localhost:11001”\r> localhost:11001 </a>" +
                         "<p></p>" +
                         "<a href=“http://localhost:11001/”\r> localhost:11001/ </a>" +
@@ -78,6 +78,21 @@ namespace AS9
                         "<a href=“http://localhost:11001/index”\r> localhost:11001/index </a>" +
                         "<p></p>" +
                         "<a href=“http://localhost:11001/index.html”> localhost:11001/index.html a>" +
+                    "</body>" +
+                    "</html>";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static string BuildPageNotFound()
+        {
+            return "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<body>" +
+                        "<h1>Page not found :(</h1>" +
+                        "<p>The link you entered isn't supported by the browser</p>" +
                     "</body>" +
                     "</html>";
         }
@@ -209,36 +224,111 @@ namespace AS9
         /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
         internal static void OnMessage(Networking channel, string message)
         {
-            if (message.Contains("/scores/"))
+            string body = "";
+            string header = "";
+
+            if (message.Contains("/scores/") && message.ToCharArray().Count(c => c == '/') == 7)
+            {
+                string[] splitMessage = message.Split("/");
+
+                string name = splitMessage[2];
+                string highmass = splitMessage[3];
+                string highrank = splitMessage[4];
+                string starttime = splitMessage[5];
+                string endtime = splitMessage[6].Substring(0, splitMessage[6].Length-5);
+
+                var builder = new ConfigurationBuilder();
+
+                builder.AddUserSecrets<DataBase>();
+                IConfigurationRoot Configuration = builder.Build();
+                var SelectedSecrets = Configuration.GetSection("DataSecrets");
+
+                string connectionString = new SqlConnectionStringBuilder()
+                {
+                    DataSource = SelectedSecrets["DataSource"],
+                    InitialCatalog = SelectedSecrets["InitialCatalog"],
+                    UserID = SelectedSecrets["UserID"],
+                    Password = SelectedSecrets["Password"],
+                    Encrypt = false
+                }.ConnectionString;
+
+                using SqlConnection con = new SqlConnection(connectionString);
+
+                con.Open();
+
+                using SqlCommand insertMass = new SqlCommand($@"INSERT INTO HighMass VALUES ('{name}', '{highmass}')", con);
+                using SqlDataReader reader1 = insertMass.ExecuteReader();
+
+                con.Close();
+
+                con.Open();
+
+                using SqlCommand insertRank = new SqlCommand($@"INSERT INTO HighRank VALUES ('{name}', '{highrank}')", con);
+                using SqlDataReader reader2 = insertRank.ExecuteReader();
+
+                con.Close();
+
+                con.Open();
+
+                using SqlCommand insertTime = new SqlCommand($@"INSERT INTO Time VALUES ('{name}', '{starttime}', '{endtime}')", con);
+                using SqlDataReader reader3 = insertTime.ExecuteReader();
+
+                con.Close();
+
+
+
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+
+            }
+            else if (message.Contains("/scores/"))
             {
                 string player = message.Remove(0, 12);
                 int toRemove = player.Length - 10;
                 player = player.Substring(0, toRemove);
-                string body = BuildHTTPScoresOfPlayer(player);
-                string header = BuildHTTPResponseHeader(body.Length);
+                body = BuildHTTPScoresOfPlayer(player);
+                header = BuildHTTPResponseHeader(body.Length);
                 channel.Send(header);
                 channel.Send("");
                 channel.Send(body);
             }
             else if (message.Contains("/highscores"))
             {
-                string body = BuildHTTPHighScoresPage();
-                string header = BuildHTTPResponseHeader(body.Length);
+                body = BuildHTTPHighScoresPage();
+                header = BuildHTTPResponseHeader(body.Length);
                 channel.Send(header);
                 channel.Send("");
                 channel.Send(body);
             }
-            else if (message.Contains("localhost:11001")
-                  || message.Contains("localhost:11001/")
-                  || message.Contains("localhost:11001/index.html")
-                  || message.Contains("localhost:11001/index"))
+            
+            else if (message.Contains("GET / HTTP/1.1\r")
+                  || message.Contains("GET /index HTTP/1.1\r")
+                  || message.Contains("GET /index.html HTTP/1.1\r"))
             {
-                string body = BuildHTTPBody();
-                string header = BuildHTTPResponseHeader(body.Length);
+                body = BuildHTTPBody();
+                header = BuildHTTPResponseHeader(body.Length);
                 channel.Send(header);
                 channel.Send("");
                 channel.Send(body);
-                channel.Disconnect();
+            }
+            else if (message.Contains("/favicon"))
+            {
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+            }
+            else if (message.Contains("css/styles.css?v=1.0"))
+            {
+                
+            }
+            else
+            {
+                body = BuildPageNotFound();
+                header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
             }
         }
 
@@ -266,10 +356,21 @@ namespace AS9
                             "color: hotpink;" +
                             "text-align: center;" +
                         "}" +
+                        "h2 {" +
+                            "color: deeppink;" +
+                            "text-align: center;" +
+                        "}" +
+                         "p {" +
+                            "color: deeppink;" +
+                            "text-align: center;" +
+                        "}" +
+                        "a {" +
+                            "color: deeppink;" +
+                            "text-align: center;" +
+                            "display: block;" +
+                        "}" +
                     "</style>";
-
         }
-
 
         /// <summary>
         ///    (1) Instruct the DB to seed itself (build tables, add data)
