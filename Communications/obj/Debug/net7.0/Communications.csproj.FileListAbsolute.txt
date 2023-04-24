@@ -25,3 +25,15 @@
 /Users/sasharybalkina/Projects/AS9/Communications/bin/Debug/net7.0/Communications.dll
 /Users/sasharybalkina/Projects/AS9/Communications/bin/Debug/net7.0/Communications.pdb
 /Users/sasharybalkina/Projects/AS9/Communications/obj/Debug/net7.0/ref/Communications.dll
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/bin/Debug/net7.0/Communications.deps.json
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/bin/Debug/net7.0/Communications.dll
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/bin/Debug/net7.0/Communications.pdb
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.csproj.AssemblyReference.cache
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.AssemblyInfoInputs.cache
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.AssemblyInfo.cs
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.csproj.CoreCompileInputs.cache
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.dll
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/refint/Communications.dll
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/Communications.pdb
+/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/Debug/net7.0/ref/Communications.dll

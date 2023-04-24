@@ -96,6 +96,9 @@ namespace AS9
             }
             return  "<!DOCTYPE html>"+
                     "<html>"+
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
                     "<body>" +
                         $@"<table style=""width:100%"">"+
                             "<tr>"+
@@ -125,7 +128,10 @@ namespace AS9
             }
             return "<!DOCTYPE html>"+
                     "<html>"+
-                    "<body>"+
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
+                    "<body>" +
                         $@"<h1>{playerName}'s Scores"+
                         $@"<table style=""width:100%"">"+
                             "<th>Game</th>"+
@@ -239,8 +245,16 @@ namespace AS9
         /// <returns>HTTP Response Header with CSS file contents added</returns>
         private static string SendCSSResponse()
         {
-            return "<style>" +
-                   "</style>";
+            return  "<style>" +
+                        "h1 {" +
+                            "color: pink;" +
+                            "text-align: center;" +
+                        "}" +
+                        "table, th, td {" +
+                            "border:lpx solid black;" +
+                        "}"+
+                    "</style>";
+
         }
 
 
