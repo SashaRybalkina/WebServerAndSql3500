@@ -190,42 +190,146 @@ namespace AS9
         }
 
         /// <summary>
+        /// Helper method that creates the tables and returns true if the tables were created
+        /// successfully. If the tables already exist, returns false.
+        /// </summary>
+        /// <returns></returns>
+        private static bool TablesCreated()
+        {
+            try
+            {
+                var builder = new ConfigurationBuilder();
+
+                string[] players = { "Jessica", "Sasha", "Aurora", "TheManOfMyDreams", "CatLover56" };
+
+                builder.AddUserSecrets<DataBase>();
+                IConfigurationRoot Configuration = builder.Build();
+                var SelectedSecrets = Configuration.GetSection("DataSecrets");
+
+                string connectionString = new SqlConnectionStringBuilder()
+                {
+                    DataSource = SelectedSecrets["DataSource"],
+                    InitialCatalog = SelectedSecrets["InitialCatalog"],
+                    UserID = SelectedSecrets["UserID"],
+                    Password = SelectedSecrets["Password"],
+                    Encrypt = false
+                }.ConnectionString;
+
+                using SqlConnection con = new SqlConnection(connectionString);
+
+                con.Open();
+                using SqlCommand CreateAllGames = new SqlCommand("CREATE TABLE AllGames (Player varchar(50), Score varchar(50), GameID varchar(50))", con);
+                using SqlDataReader reader1 = CreateAllGames.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand CreateHighMass = new SqlCommand("CREATE TABLE HighMass (Player varchar(50), Mass varchar(50))", con);
+                using SqlDataReader reader2 = CreateHighMass.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand CreateHighRank = new SqlCommand("CREATE TABLE HighRank (Player varchar(50), Rank varchar(50))", con);
+                using SqlDataReader reader3 = CreateHighRank.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand CreateHighScores = new SqlCommand("CREATE TABLE HighScores (Player varchar(50), Score varchar(50))", con);
+                using SqlDataReader reader4 = CreateHighScores.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand CreateTime = new SqlCommand("CREATE TABLE Time (Player varchar(50), StartTime varchar(50), EndTime varchar(50))", con);
+                using SqlDataReader reader5 = CreateTime.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand CreateTotalTime = new SqlCommand("CREATE TABLE TotalTime (Player varchar(50), Time varchar(50))", con);
+                using SqlDataReader reader6 = CreateTotalTime.ExecuteReader();
+                con.Close();
+
+                foreach (string player in players)
+                {
+                    Random random = new Random();
+                    string GameID = random.Next(0, 50).ToString();
+                    string Mass = random.Next(50, 5000).ToString();
+                    string Rank = random.Next(1, 100).ToString();
+                    string Score = random.Next(0, 5000).ToString();
+                    int StartTime = random.Next(100000, 1000000);
+                    int EndTime = random.Next(100000000, 1000000000);
+                    string TotalTime = (EndTime - StartTime).ToString();
+
+                    con.Open();
+                    using SqlCommand InsertAllGames = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{GameID}')", con);
+                    using SqlDataReader reader01 = InsertAllGames.ExecuteReader();
+                    con.Close();
+
+                    con.Open();
+                    using SqlCommand InsertHighMass = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Mass}')", con);
+                    using SqlDataReader reader02 = InsertHighMass.ExecuteReader();
+                    con.Close();
+
+                    con.Open();
+                    using SqlCommand InsertHighRank = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Rank}')", con);
+                    using SqlDataReader reader03 = InsertHighRank.ExecuteReader();
+                    con.Close();
+
+                    con.Open();
+                    using SqlCommand InsertHighScores = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Score}')", con);
+                    using SqlDataReader reader04 = InsertHighScores.ExecuteReader();
+                    con.Close();
+
+                    con.Open();
+                    using SqlCommand InsertTime = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{StartTime.ToString()}', '{EndTime.ToString()}')", con);
+                    using SqlDataReader reader05 = InsertTime.ExecuteReader();
+                    con.Close();
+
+                    con.Open();
+                    using SqlCommand InsertTotalTime = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{TotalTime}')", con);
+                    using SqlDataReader reader06 = InsertTotalTime.ExecuteReader();
+                    con.Close();
+                }
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         ///    (1) Instruct the DB to seed itself (build tables, add data)
         ///    (2) Report to the web browser on the success
         /// </summary>
         /// <returns> the HTTP response header followed by some informative information</returns>
         private static string CreateDBTablesPage()
         {
-            //CREATE
-            //INSERT
-            //x6 for all tables
+            string SuccessPage =
+                "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
+                    "<body>" +
+                        "<h1>Data Created Successfully :)</h1>" +
+                    "</body>" +
+                    "</html>";
 
-            var builder = new ConfigurationBuilder();
+            string FailPage =
+                "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<body>" +
+                        "<h1>Error. Tables already exist.</h1>" +
+                    "</body>" +
+                    "</html>";
 
-            builder.AddUserSecrets<DataBase>();
-            IConfigurationRoot Configuration = builder.Build();
-            var SelectedSecrets = Configuration.GetSection("DataSecrets");
-
-            string connectionString = new SqlConnectionStringBuilder()
+            if (TablesCreated())
             {
-                DataSource = SelectedSecrets["DataSource"],
-                InitialCatalog = SelectedSecrets["InitialCatalog"],
-                UserID = SelectedSecrets["UserID"],
-                Password = SelectedSecrets["Password"],
-                Encrypt = false
-            }.ConnectionString;
-
-            using SqlConnection con = new SqlConnection(connectionString);
-
-            con.Open();
-
-            using SqlCommand insertMass = new SqlCommand("CREATE TABLE NewAllGames", con);
-            using SqlDataReader reader1 = insertMass.ExecuteReader();
-
-            con.Close();
-
-
-            return "";
+                return SuccessPage;
+            }
+            else
+            {
+                return FailPage;
+            }
         }
 
         /// <summary>
@@ -323,7 +427,11 @@ namespace AS9
 
                 con.Close();
 
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
             }
+
             else if (message.Contains("/scores/"))
             {
                 string player = message.Remove(0, 12);
@@ -335,6 +443,7 @@ namespace AS9
                 channel.Send("");
                 channel.Send(body);
             }
+
             else if (message.Contains("/highscores"))
             {
                 body = BuildHTTPHighScoresPage();
@@ -354,12 +463,14 @@ namespace AS9
                 channel.Send("");
                 channel.Send(body);
             }
+
             else if (message.Contains("/favicon"))
             {
                 channel.Send(header);
                 channel.Send("");
                 channel.Send(body);
             }
+
             else if (message.Contains("/create"))
             {
                 body = CreateDBTablesPage();
@@ -368,6 +479,7 @@ namespace AS9
                 channel.Send("");
                 channel.Send(body);
             }
+
             else
             {
                 body = BuildPageNotFound();
