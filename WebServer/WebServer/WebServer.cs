@@ -170,23 +170,21 @@ namespace AS9
         }
 
         /// <summary>
-        /// Create a response message string to send back to the connecting
-        /// program (i.e., the web browser).  The string is of the form:
         /// 
-        ///   HTTP Header
-        ///   [new line]
-        ///   HTTP Body
-        ///  
-        ///  The Header must follow the header protocol.
-        ///  The body should follow the HTML doc protocol.
         /// </summary>
-        /// <returns> the complete HTTP response</returns>
-        private static string BuildMainPage()
+        /// <param name="playerName"></param>
+        /// <returns></returns>
+        private static string BuildHTTPScoresInsert()
         {
-            string message = BuildHTTPBody();
-            string header = BuildHTTPResponseHeader(message.Length);
-
-            return header + message;
+            return "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
+                    "<body>" +
+                        "<h1>Successfully inserted data :)</h1>" +
+                    "</body>" +
+                    "</html>";
         }
 
         /// <summary>
@@ -332,49 +330,12 @@ namespace AS9
                 return FailPage;
             }
         }
-
+        
         /// <summary>
-        ///   <para>
-        ///     When a request comes in (from a browser) this method will
-        ///     be called by the Networking code.  Each line of the HTTP request
-        ///     will come as a separate message.  The "line" we are interested in
-        ///     is a PUT or GET request.  
-        ///   </para>
-        ///   <para>
-        ///     The following messages are actionable:
-        ///   </para>
-        ///   <para>
-        ///      get highscore - respond with a highscore page
-        ///   </para>
-        ///   <para>
-        ///      get favicon - don't do anything (we don't support this)
-        ///   </para>
-        ///   <para>
-        ///      get scores/name - along with a name, respond with a list of scores for the particular user
-        ///   <para>
-        ///      get scores/name/highmass/highrank/startime/endtime - insert the appropriate data
-        ///      into the database.
-        ///   </para>
-        ///   </para>
-        ///   <para>
-        ///     create - contact the DB and create the required tables and seed them with some dummy data
-        ///   </para>
-        ///   <para>
-        ///     get index (or "", or "/") - send a happy home page back
-        ///   </para>
-        ///   <para>
-        ///     get css/styles.css?v=1.0  - send your sites css file data back
-        ///   </para>
-        ///   <para>
-        ///     otherwise send a page not found error
-        ///   </para>
-        ///   <para>
-        ///     Warning: when you send a response, the web browser is going to expect the message to
-        ///     be line by line (new line separated) but we use new line as a special character in our
-        ///     networking object.  Thus, you have to send _every line of your response_ as a new Send message.
-        ///   </para>
+        /// 
         /// </summary>
-        /// <param name="network_message_state"> provided by the Networking code, contains socket and message</param>
+        /// <param name="channel"></param>
+        /// <param name="message"></param>
         internal static void OnMessage(Networking channel, string message)
         {
             string body = "";
@@ -428,6 +389,8 @@ namespace AS9
 
                 con.Close();
 
+                body = BuildHTTPScoresInsert();
+                header = BuildHTTPResponseHeader(body.Length);
                 channel.Send(header);
                 channel.Send("");
                 channel.Send(body);
