@@ -196,27 +196,28 @@ namespace AS9
         /// <returns></returns>
         private static bool TablesCreated()
         {
+
+            var builder = new ConfigurationBuilder();
+
+            string[] players = { "Jessica", "Sasha", "Aurora", "TheManOfMyDreams", "CatLover56" };
+
+            builder.AddUserSecrets<DataBase>();
+            IConfigurationRoot Configuration = builder.Build();
+            var SelectedSecrets = Configuration.GetSection("DataSecrets");
+
+            string connectionString = new SqlConnectionStringBuilder()
+            {
+                DataSource = SelectedSecrets["DataSource"],
+                InitialCatalog = SelectedSecrets["InitialCatalog"],
+                UserID = SelectedSecrets["UserID"],
+                Password = SelectedSecrets["Password"],
+                Encrypt = false
+            }.ConnectionString;
+
+            using SqlConnection con = new SqlConnection(connectionString);
+
             try
             {
-                var builder = new ConfigurationBuilder();
-
-                string[] players = { "Jessica", "Sasha", "Aurora", "TheManOfMyDreams", "CatLover56" };
-
-                builder.AddUserSecrets<DataBase>();
-                IConfigurationRoot Configuration = builder.Build();
-                var SelectedSecrets = Configuration.GetSection("DataSecrets");
-
-                string connectionString = new SqlConnectionStringBuilder()
-                {
-                    DataSource = SelectedSecrets["DataSource"],
-                    InitialCatalog = SelectedSecrets["InitialCatalog"],
-                    UserID = SelectedSecrets["UserID"],
-                    Password = SelectedSecrets["Password"],
-                    Encrypt = false
-                }.ConnectionString;
-
-                using SqlConnection con = new SqlConnection(connectionString);
-
                 con.Open();
                 using SqlCommand CreateAllGames = new SqlCommand("CREATE TABLE AllGames (Player varchar(50), Score varchar(50), GameID varchar(50))", con);
                 using SqlDataReader reader1 = CreateAllGames.ExecuteReader();
@@ -246,52 +247,52 @@ namespace AS9
                 using SqlCommand CreateTotalTime = new SqlCommand("CREATE TABLE TotalTime (Player varchar(50), Time varchar(50))", con);
                 using SqlDataReader reader6 = CreateTotalTime.ExecuteReader();
                 con.Close();
-
-                foreach (string player in players)
-                {
-                    Random random = new Random();
-                    string GameID = random.Next(0, 50).ToString();
-                    string Mass = random.Next(50, 5000).ToString();
-                    string Rank = random.Next(1, 100).ToString();
-                    string Score = random.Next(0, 5000).ToString();
-                    int StartTime = random.Next(100000, 1000000);
-                    int EndTime = random.Next(100000000, 1000000000);
-                    string TotalTime = (EndTime - StartTime).ToString();
-
-                    con.Open();
-                    using SqlCommand InsertAllGames = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{GameID}')", con);
-                    using SqlDataReader reader01 = InsertAllGames.ExecuteReader();
-                    con.Close();
-
-                    con.Open();
-                    using SqlCommand InsertHighMass = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Mass}')", con);
-                    using SqlDataReader reader02 = InsertHighMass.ExecuteReader();
-                    con.Close();
-
-                    con.Open();
-                    using SqlCommand InsertHighRank = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Rank}')", con);
-                    using SqlDataReader reader03 = InsertHighRank.ExecuteReader();
-                    con.Close();
-
-                    con.Open();
-                    using SqlCommand InsertHighScores = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Score}')", con);
-                    using SqlDataReader reader04 = InsertHighScores.ExecuteReader();
-                    con.Close();
-
-                    con.Open();
-                    using SqlCommand InsertTime = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{StartTime.ToString()}', '{EndTime.ToString()}')", con);
-                    using SqlDataReader reader05 = InsertTime.ExecuteReader();
-                    con.Close();
-
-                    con.Open();
-                    using SqlCommand InsertTotalTime = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{TotalTime}')", con);
-                    using SqlDataReader reader06 = InsertTotalTime.ExecuteReader();
-                    con.Close();
-                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
+            }
+
+            foreach (string player in players)
+            {
+                Random random = new Random();
+                string GameID = random.Next(0, 50).ToString();
+                string Mass = random.Next(50, 5000).ToString();
+                string Rank = random.Next(1, 100).ToString();
+                string Score = random.Next(0, 5000).ToString();
+                int StartTime = random.Next(100000, 1000000);
+                int EndTime = random.Next(100000000, 1000000000);
+                string TotalTime = (EndTime - StartTime).ToString();
+
+                con.Open();
+                using SqlCommand InsertAllGames = new SqlCommand($@"INSERT INTO AllGames VALUES ('{player}', '{Score}', '{GameID}')", con);
+                using SqlDataReader reader01 = InsertAllGames.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand InsertHighMass = new SqlCommand($@"INSERT INTO HighMass VALUES ('{player}', '{Mass}')", con);
+                using SqlDataReader reader02 = InsertHighMass.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand InsertHighRank = new SqlCommand($@"INSERT INTO HighRank VALUES ('{player}', '{Rank}')", con);
+                using SqlDataReader reader03 = InsertHighRank.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand InsertHighScores = new SqlCommand($@"INSERT INTO HighScores VALUES ('{player}', '{Score}')", con);
+                using SqlDataReader reader04 = InsertHighScores.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand InsertTime = new SqlCommand($@"INSERT INTO Time VALUES ('{player}', '{StartTime.ToString()}', '{EndTime.ToString()}')", con);
+                using SqlDataReader reader05 = InsertTime.ExecuteReader();
+                con.Close();
+
+                con.Open();
+                using SqlCommand InsertTotalTime = new SqlCommand($@"INSERT INTO TotalTime VALUES ('{player}', '{TotalTime}')", con);
+                using SqlDataReader reader06 = InsertTotalTime.ExecuteReader();
+                con.Close();
             }
             return true;
         }
