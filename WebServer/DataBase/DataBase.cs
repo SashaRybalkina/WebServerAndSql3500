@@ -8,14 +8,8 @@ using Communications;
 using System.Collections.Generic;
 
 /// <summary>
-/// Author:  H. James de St. Germain
-/// Date:    Spring 2020
-/// Updated: Spring 2022
-///          Spring 2023
-/// 
-/// Coding examples for connecting to and querying an SQL Database
-/// 
-/// https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows
+/// Author:  Sasha Rybalkina
+/// Partner: Aurora Zuo
 /// 
 /// </summary>
 public class DataBase
@@ -46,33 +40,10 @@ public class DataBase
         }.ConnectionString;
     }
 
-    public void AddPlayers()
-    {
-        Console.WriteLine("Can we add a row?");
-
-        try
-        {
-            using SqlConnection con = new SqlConnection(connectionString);
-
-            con.Open();
-
-            using SqlCommand command = new SqlCommand("INSERT INTO Players VALUES ('Jessica', 6)", con);
-            using SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                Console.WriteLine("{0} {1}",
-                    reader.GetInt32(0), reader.GetString(1));
-            }
-            con.Close();
-        }
-        
-        catch (SqlException exception)
-        {
-            Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
-        }
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<string, string> ReadPlayerScores()
     {
         Dictionary<string, string> scores = new();
@@ -100,6 +71,11 @@ public class DataBase
 
         return scores;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<string, List<List<string>>> ReadScoresOfPlayers()
     {
         Dictionary<string, List<List<string>>> scores = new();

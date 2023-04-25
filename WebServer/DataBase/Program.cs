@@ -6,6 +6,5 @@ class Program
     public static void Main(string[] args)
     {
         DB = new DataBase();
-        DB.AddPlayers();
     }
 }

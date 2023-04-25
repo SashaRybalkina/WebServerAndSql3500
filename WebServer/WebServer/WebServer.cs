@@ -38,6 +38,15 @@ namespace AS9
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="channel"></param>
+        internal static void OnDisconnect(Networking channel)
+        {
+            Debug.WriteLine($"Goodbye {channel.RemoteAddressPort}");
+        }
+
+        /// <summary>
         /// Create the HTTP response header, containing items such as
         /// the "HTTP/1.1 200 OK" line.
         /// 
@@ -153,7 +162,7 @@ namespace AS9
                             "<tr>" +
                             "<th>Score</th>" +
                             "<th>Game</th>" +
-                            "" +
+                            "</tr>" +
                             AddToTable +
                         "</table>"+
                     "</body>"+
@@ -178,6 +187,45 @@ namespace AS9
             string header = BuildHTTPResponseHeader(message.Length);
 
             return header + message;
+        }
+
+        /// <summary>
+        ///    (1) Instruct the DB to seed itself (build tables, add data)
+        ///    (2) Report to the web browser on the success
+        /// </summary>
+        /// <returns> the HTTP response header followed by some informative information</returns>
+        private static string CreateDBTablesPage()
+        {
+            //CREATE
+            //INSERT
+            //x6 for all tables
+
+            var builder = new ConfigurationBuilder();
+
+            builder.AddUserSecrets<DataBase>();
+            IConfigurationRoot Configuration = builder.Build();
+            var SelectedSecrets = Configuration.GetSection("DataSecrets");
+
+            string connectionString = new SqlConnectionStringBuilder()
+            {
+                DataSource = SelectedSecrets["DataSource"],
+                InitialCatalog = SelectedSecrets["InitialCatalog"],
+                UserID = SelectedSecrets["UserID"],
+                Password = SelectedSecrets["Password"],
+                Encrypt = false
+            }.ConnectionString;
+
+            using SqlConnection con = new SqlConnection(connectionString);
+
+            con.Open();
+
+            using SqlCommand insertMass = new SqlCommand("CREATE TABLE NewAllGames", con);
+            using SqlDataReader reader1 = insertMass.ExecuteReader();
+
+            con.Close();
+
+
+            return "";
         }
 
         /// <summary>
@@ -275,12 +323,6 @@ namespace AS9
 
                 con.Close();
 
-
-
-                channel.Send(header);
-                channel.Send("");
-                channel.Send(body);
-
             }
             else if (message.Contains("/scores/"))
             {
@@ -318,9 +360,13 @@ namespace AS9
                 channel.Send("");
                 channel.Send(body);
             }
-            else if (message.Contains("css/styles.css?v=1.0"))
+            else if (message.Contains("/create"))
             {
-                
+                body = CreateDBTablesPage();
+                header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
             }
             else
             {
@@ -370,21 +416,6 @@ namespace AS9
                             "display: block;" +
                         "}" +
                     "</style>";
-        }
-
-        /// <summary>
-        ///    (1) Instruct the DB to seed itself (build tables, add data)
-        ///    (2) Report to the web browser on the success
-        /// </summary>
-        /// <returns> the HTTP response header followed by some informative information</returns>
-        private static string CreateDBTablesPage()
-        {
-            throw new NotImplementedException("create the database tables by 'talking' with the DB server and then return an informative web page");
-        }
-
-        internal static void OnDisconnect(Networking channel)
-        {
-            Debug.WriteLine($"Goodbye {channel.RemoteAddressPort}");
         }
     }
 }
