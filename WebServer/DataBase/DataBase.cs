@@ -72,6 +72,38 @@ public class DataBase
         return scores;
     }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> ReadTimesSurvived()
+        {
+            Dictionary<string, string> times = new();
+
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+
+                con.Open();
+
+                using SqlCommand command = new SqlCommand("SELECT Player, Time FROM TotalTime", con);
+                using SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    times.Add(reader["Player"].ToString(), reader["Time"].ToString());
+                    Console.WriteLine($"{reader["Player"]} - {reader["Time"]}");
+                }
+            }
+
+            catch (SqlException exception)
+            {
+                Console.WriteLine($"Error in SQL connection:\n   - {exception.Message}");
+            }
+
+            return times;
+        }
+
     /// <summary>
     /// 
     /// </summary>

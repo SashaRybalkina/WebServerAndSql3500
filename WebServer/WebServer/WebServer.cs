@@ -188,6 +188,37 @@ namespace AS9
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <returns></returns>
+        private static string BuildHTTPTotalTime()
+        {
+            Dictionary<string, string> players = DB.ReadTimesSurvived();
+            string AddToTable = "";
+            foreach (string player in players.Keys)
+            {
+                AddToTable += $@"<tr><td>{player}</td><td>{players[player]}</td></tr>";
+            }
+            return "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<head>" +
+                        SendCSSResponse() +
+                    "</head>" +
+                    "<body>" +
+                        "<h1>Total time that players lasted (in milliseconds)</h1>" +
+                         $@"<table>" +
+                            "<tr>" +
+                            "<th>Player</th>" +
+                            "<th>Time Survived</th>" +
+                            "</tr>" +
+                            AddToTable +
+                        "</table>" +
+                    "</body>" +
+                    "</html>";
+        }
+
+        /// <summary>
         /// Helper method that creates the tables and returns true if the tables were created
         /// successfully. If the tables already exist, returns false.
         /// </summary>
@@ -389,6 +420,13 @@ namespace AS9
 
                 con.Close();
 
+                con.Open();
+
+                using SqlCommand insertTotalTime = new SqlCommand($@"INSERT INTO TotalTime VALUES ('{name}', '{long.Parse(endtime) - long.Parse(starttime)}')", con);
+                using SqlDataReader reader4 = insertTotalTime.ExecuteReader();
+
+                con.Close();
+
                 body = BuildHTTPScoresInsert();
                 header = BuildHTTPResponseHeader(body.Length);
                 channel.Send(header);
@@ -416,7 +454,16 @@ namespace AS9
                 channel.Send("");
                 channel.Send(body);
             }
-            
+
+            else if (message.Contains("/fancy"))
+            {
+                body = BuildHTTPTotalTime();
+                header = BuildHTTPResponseHeader(body.Length);
+                channel.Send(header);
+                channel.Send("");
+                channel.Send(body);
+            }
+
             else if (message.Contains("GET / HTTP/1.1\r")
                   || message.Contains("GET /index HTTP/1.1\r")
                   || message.Contains("GET /index.html HTTP/1.1\r"))
