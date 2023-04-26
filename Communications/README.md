@@ -6,7 +6,7 @@ Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Aurora1825 & crazyrussian123456
 Repo:       https://github.com/uofu-cs3500-spring23/assignment8agario-dominators_of_worlds
 Date:       25-Apr-2023 Time (of when submission is ready to be evaluated)
-Solution:   Agario
+Solution:   WebServer
 Copyright:  CS 3500 and Aurora Zuo & Sasha Rybalkina - This work may not be copied for use in Academic Coursework.
 ```
 
@@ -18,8 +18,7 @@ The code uses the TcpClient object and its various async method such as ReadAsyn
 WriteAsync, AcceptTcpClientAsync, etc.
 
 The Networking class also contains three delegates, which will be used in creating a
-Networking object. The Networking object will be used in ClientGUI and the provided 
-server to form connection.
+Networking object. The Networking object will be used in WebServer to form connection.
 
 PS: We commented the logger AwaitMessageAsync out in the Connect method because they break
 our code. We tried to debug and asked the TA for help but unfortunately we weren't 

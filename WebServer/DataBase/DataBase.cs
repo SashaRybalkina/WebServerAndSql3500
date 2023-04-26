@@ -23,9 +23,9 @@ using System.Collections;
 /// 
 /// File Content
 ///     This class demonstrates all the necessary functionality of a database.
-///     It connects to the SQL database using the user secrets and stores the
-///     data of the players such as scores and times. It also contains the method
-///     for creating tables and inserting data into them.
+///     It connects to the SQL database using the user secrets and retreives the
+///     data from the tables such as highscores, scores, time survived. It also
+///     contains the helper method for creating six tables and inserting data into them.
 /// </summary>
 public class DataBase
 {

@@ -334,19 +334,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/sasharybalkina/.nuget/packages/": {}
+    "/Users/aurora/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sasharybalkina/Projects/AS9/Communications/Communications.csproj",
+      "projectUniqueName": "/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/Communications.csproj",
       "projectName": "Communications",
-      "projectPath": "/Users/sasharybalkina/Projects/AS9/Communications/Communications.csproj",
-      "packagesPath": "/Users/sasharybalkina/.nuget/packages/",
-      "outputPath": "/Users/sasharybalkina/Projects/AS9/Communications/obj/",
+      "projectPath": "/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/Communications.csproj",
+      "packagesPath": "/Users/aurora/.nuget/packages/",
+      "outputPath": "/Users/aurora/Projects/assignment-nine---web-server---sql-hungry_for_men/Communications/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/sasharybalkina/.nuget/NuGet/NuGet.Config"
+        "/Users/aurora/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -392,7 +392,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.202/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.101/RuntimeIdentifierGraph.json"
       }
     }
   }
