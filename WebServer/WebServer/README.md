@@ -5,15 +5,28 @@ Date:       25-Apr-2023
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Aurora1825 & crazyrussian123456
 Repo:       https://github.com/uofu-cs3500-spring23/assignment-nine---web-server---sql-hungry_for_men
-Date:       25-Apr-2023 Time (of when submission is ready to be evaluated)
+Date:       26-Apr-2023 Time (of when submission is ready to be evaluated)
 Solution:   WebServer
 Copyright:  CS 3500 and Aurora Zuo & Sasha Rybalkina - This work may not be copied for use in Academic Coursework.
 ```
 
 # Comments to Evaluators:
 
- This class demonstrates all the necessary functionality of a web server. Upon start, it waits for 
- the browser to connect to port 11001. Then it parses the HTTP request and handles the GET requests.
+This class demonstrates all the necessary functionality of a web server. It contains the methods
+for handling Connecting/Disconnecting messages; methods for building various web pages such as
+highscores, totaltime, etc. It also handles the GET requests and returns web pages accordingly.
+
+For our extra features, we created a '/fancy' request. Upon entering the request, the browser returns
+a web page showing a table containing all the players' names and their time survived.
+
+The '/create' request creates six tables in the SQL database, which are AllGames, HighMass, HighRank,
+HighScores, Time, and TotalTime. If the tables are successfully created, the browser returns a success
+page, if the tables already exist, it will return an error page. The helper method for creating tables
+and inserting data is in the DataBase class.
+
+NOTE: 
+Both of us are using MacOS; thus, we changed our all the '\r\n' to '\r', otherwise it will break our code.
+For our program to run on other machines like Windows, you will have to change all the '\r' back to '\r\n'.
 
 # Assignments Specific Topics:
 

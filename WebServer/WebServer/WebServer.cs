@@ -13,7 +13,7 @@ namespace AS9
     /// <summary>
     /// Author:    Aurora Zuo 
     /// Partner:   Sasha Rybalkina
-    /// Date:      25-Apr-2023
+    /// Date:      26-Apr-2023
     /// Course:    CS 3500, University of Utah, School of Computing
     /// Copyright: CS 3500, Aurora Zuo, and Sasha Rybalkina - This work not 
     ///            be copied for use in Academic Coursework.
@@ -25,8 +25,9 @@ namespace AS9
     /// 
     /// File Content
     ///     This class demonstrates all the necessary functionality of a web server.
-    ///     Upon start, it waits for the browser to connect to port 11001. Then it
-    ///     parses the HTTP request and handles the GET requests.
+    ///     It contains the methods for handling Connecting/Disconnecting messages;
+    ///     methods for building various web pages such as highscores, totaltime, etc.
+    ///     It also handles the GET requests and returns web pages accordingly.
     /// </summary>
     class WebServer
     {

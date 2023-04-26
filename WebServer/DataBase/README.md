@@ -5,19 +5,29 @@ Date:       25-Apr-2023
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Aurora1825 & crazyrussian123456
 Repo:       https://github.com/uofu-cs3500-spring23/assignment-nine---web-server---sql-hungry_for_men
-Date:       25-Apr-2023 Time (of when submission is ready to be evaluated)
+Date:       26-Apr-2023 Time (of when submission is ready to be evaluated)
 Solution:   WebServer
 Copyright:  CS 3500 and Aurora Zuo & Sasha Rybalkina - This work may not be copied for use in Academic Coursework.
 ```
 
 # Comments to Evaluators:
 
-This program demonstrates all the necessary functionality of a database. It connects to the SQL database 
+This program demonstrates all the necessary functionalities of a database. It connects to the SQL database 
 using the user secrets and retreives the data from the tables such as high scores, scores, times survived.
-It also contains the helper method for creating six tables and inserting data into them.
+It contains helper method for inserting the necessary data into the tables according to the scores followed
+by five slashes request. It also contains the helper method for creating six tables and inserting data into them
+using SSMS.
 
-Both of us are using MacOS; thus, our code only runs when all the '/n''/r' are '\n''\r', otherwise it will break 
-our code. 
+Tables: 
+We created six tables, which are AllGames, HighMass, HighRank, HighScores, Time, and TotalTime.
+The AllGames contains the players' names, their highest scores, and IDs. The HighMass records the
+largest masses; HighRank stores the players' highest ranks; HighScores stores the players' highest
+scores. Time stores the players' game start time and end time in milliseconds. TotalTime stores
+the players' total time survived in the game by subtracting the start time from the end time.
+
+NOTE: 
+Both of us are using MacOS; thus, we changed our all the '\r\n' to '\r', otherwise it will break our code.
+For our program to run on other machines like Windows, you will have to change all the '\r' back to '\r\n'.
 
 # Assignments Specific Topics:
 
