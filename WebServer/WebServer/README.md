@@ -27,7 +27,7 @@ SQL, SSMS, Database, Tables, User Secrets, HTTP, HTML, CSS.
 
 # Time Expenditures:
 
-    Total Predicted Hours:       10          Total Actual Hours:           10
+    Total Predicted Hours:       12          Total Actual Hours:           12
 
     All the work were done through pair programming, thus the time expenditures for each partner
     are the same.

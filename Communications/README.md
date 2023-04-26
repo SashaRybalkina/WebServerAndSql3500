@@ -4,7 +4,7 @@ Partner:    Sasha Rybalkina
 Date:       14-Apr-2023
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Aurora1825 & crazyrussian123456
-Repo:       https://github.com/uofu-cs3500-spring23/assignment8agario-dominators_of_worlds
+Repo:       https://github.com/uofu-cs3500-spring23/assignment-nine---web-server---sql-hungry_for_men
 Date:       25-Apr-2023 Time (of when submission is ready to be evaluated)
 Solution:   WebServer
 Copyright:  CS 3500 and Aurora Zuo & Sasha Rybalkina - This work may not be copied for use in Academic Coursework.
