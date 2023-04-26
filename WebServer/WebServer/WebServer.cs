@@ -37,8 +37,7 @@ namespace AS9
         private static DataBase DB = new DataBase();
 
         /// <summary>
-        /// Basic connect handler - i.e., a browser has connected!
-        /// Print an information message
+        /// Prints a message when connection is recieved
         /// </summary>
         /// <param name="channel"> the Networking connection</param>
         internal static void OnClientConnect(Networking channel)
@@ -47,21 +46,20 @@ namespace AS9
         }
 
         /// <summary>
-        /// Disconnects handler. Browser disconnects.
+        /// Prints a message when disconnected
         /// </summary>
         /// <param name="channel"></param>
         internal static void OnDisconnect(Networking channel)
         {
-            Debug.WriteLine($"Goodbye {channel.RemoteAddressPort}");
+            Console.WriteLine($"Goodbye {channel.RemoteAddressPort}");
         }
 
         /// <summary>
-        /// Create the HTTP response header, containing items such as
-        /// the "HTTP/1.1 200 OK" line.       
+        /// Creates the response header   
         /// </summary>
-        /// <param name="length"> how big a message are we sending</param>
-        /// <param name="type"> usually html, but could be css</param>
-        /// <returns>returns a string with the response header</returns>
+        /// <param name="length"> Length of the messgae we are sending</param>
+        /// <param name="type"> Text or html</param>
+        /// <returns>returns The response header</returns>
         private static string BuildHTTPResponseHeader(int length, string type = "text/html")
         {
             return $"HTTP/1.1 200 OK\rDate: {DateTime.Now}\rContent-Length: {length}\rContent-Type: text/html\rConnection: Closed";
@@ -278,59 +276,7 @@ namespace AS9
             // SQL database.
             if (message.Contains("/scores/") && message.ToCharArray().Count(c => c == '/') == 7)
             {
-                string[] splitMessage = message.Split("/");
-
-                string name = splitMessage[2];
-                string highmass = splitMessage[3];
-                string highrank = splitMessage[4];
-                string starttime = splitMessage[5];
-                string endtime = splitMessage[6].Substring(0, splitMessage[6].Length-5);
-
-                // builds the connection with the SQL server
-                var builder = new ConfigurationBuilder();
-
-                builder.AddUserSecrets<DataBase>();
-                IConfigurationRoot Configuration = builder.Build();
-                var SelectedSecrets = Configuration.GetSection("DataSecrets");
-
-                string connectionString = new SqlConnectionStringBuilder()
-                {
-                    DataSource = SelectedSecrets["DataSource"],
-                    InitialCatalog = SelectedSecrets["InitialCatalog"],
-                    UserID = SelectedSecrets["UserID"],
-                    Password = SelectedSecrets["Password"],
-                    Encrypt = false
-                }.ConnectionString;
-
-                using SqlConnection con = new SqlConnection(connectionString);
-
-                con.Open();
-
-                using SqlCommand insertMass = new SqlCommand($@"INSERT INTO HighMass VALUES ('{name}', '{highmass}')", con);
-                using SqlDataReader reader1 = insertMass.ExecuteReader();
-
-                con.Close();
-
-                con.Open();
-
-                using SqlCommand insertRank = new SqlCommand($@"INSERT INTO HighRank VALUES ('{name}', '{highrank}')", con);
-                using SqlDataReader reader2 = insertRank.ExecuteReader();
-
-                con.Close();
-
-                con.Open();
-
-                using SqlCommand insertTime = new SqlCommand($@"INSERT INTO Time VALUES ('{name}', '{starttime}', '{endtime}')", con);
-                using SqlDataReader reader3 = insertTime.ExecuteReader();
-
-                con.Close();
-
-                con.Open();
-
-                using SqlCommand insertTotalTime = new SqlCommand($@"INSERT INTO TotalTime VALUES ('{name}', '{long.Parse(endtime) - long.Parse(starttime)}')", con);
-                using SqlDataReader reader4 = insertTotalTime.ExecuteReader();
-
-                con.Close();
+                DB.InsertData(message);
 
                 body = BuildHTTPScoresInsert();
                 header = BuildHTTPResponseHeader(body.Length);

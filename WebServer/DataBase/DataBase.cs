@@ -170,6 +170,69 @@ public class DataBase
     }
 
     /// <summary>
+    /// Helper method for the scores followed by five slashes request which takes
+    /// care of inserting the necessary data into the tables.
+    /// </summary>
+    /// <param name="message"></param>
+    public void InsertData(string message)
+    {
+        string[] splitMessage = message.Split("/");
+
+        string name = splitMessage[2];
+        string highmass = splitMessage[3];
+        string highrank = splitMessage[4];
+        string starttime = splitMessage[5];
+        string endtime = splitMessage[6].Substring(0, splitMessage[6].Length - 5);
+
+        // builds the connection with the SQL server
+        var builder = new ConfigurationBuilder();
+
+        builder.AddUserSecrets<DataBase>();
+        IConfigurationRoot Configuration = builder.Build();
+        var SelectedSecrets = Configuration.GetSection("DataSecrets");
+
+        string connectionString = new SqlConnectionStringBuilder()
+        {
+            DataSource = SelectedSecrets["DataSource"],
+            InitialCatalog = SelectedSecrets["InitialCatalog"],
+            UserID = SelectedSecrets["UserID"],
+            Password = SelectedSecrets["Password"],
+            Encrypt = false
+        }.ConnectionString;
+
+        using SqlConnection con = new SqlConnection(connectionString);
+
+        // Inserts data into all the tables that handle this data
+        con.Open();
+
+        using SqlCommand insertMass = new SqlCommand($@"INSERT INTO HighMass VALUES ('{name}', '{highmass}')", con);
+        using SqlDataReader reader1 = insertMass.ExecuteReader();
+
+        con.Close();
+
+        con.Open();
+
+        using SqlCommand insertRank = new SqlCommand($@"INSERT INTO HighRank VALUES ('{name}', '{highrank}')", con);
+        using SqlDataReader reader2 = insertRank.ExecuteReader();
+
+        con.Close();
+
+        con.Open();
+
+        using SqlCommand insertTime = new SqlCommand($@"INSERT INTO Time VALUES ('{name}', '{starttime}', '{endtime}')", con);
+        using SqlDataReader reader3 = insertTime.ExecuteReader();
+
+        con.Close();
+
+        con.Open();
+
+        using SqlCommand insertTotalTime = new SqlCommand($@"INSERT INTO TotalTime VALUES ('{name}', '{long.Parse(endtime) - long.Parse(starttime)}')", con);
+        using SqlDataReader reader4 = insertTotalTime.ExecuteReader();
+
+        con.Close();
+    }
+
+    /// <summary>
     /// Helper method that creates the tables and returns true if the tables were created
     /// successfully. If the tables already exist, returns false.
     /// </summary>
